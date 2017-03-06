@@ -1,0 +1,22 @@
+---
+
+- name:  script to get the client machine ready
+  hosts: all
+  user: root
+  connection: ssh
+
+  tasks:
+
+    - name: copy repo files
+      copy: src=/etc/yum.repos.d/epel.repo dest=/etc/yum.repos.d/epel.repo
+
+    - name: copy hosts file
+      copy: src=/etc/hosts dest=/etc/hosts
+
+
+    - name: copy authorization files
+      authorized_key: user=root key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+    - name: install python
+      yum: name=python  state=present
+
